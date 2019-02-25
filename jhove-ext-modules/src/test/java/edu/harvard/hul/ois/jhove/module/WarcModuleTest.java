@@ -147,13 +147,14 @@ public class WarcModuleTest {
 
 		RepInfo info = generalInvalidChecks(warcFile);
         
-        assertEquals(16, info.getMessage().size());
+        assertEquals(17, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
-        assertEquals(4, messages.size());
+        assertEquals(5, messages.size());
         assertEquals(4, messages.get(DiagnosisType.REQUIRED_INVALID.name()).intValue());
         assertEquals(1, messages.get(DiagnosisType.INVALID_EXPECTED.name()).intValue());
         assertEquals(2, messages.get(DiagnosisType.INVALID.name()).intValue());
         assertEquals(9, messages.get(DiagnosisType.EMPTY.name()).intValue());
+        assertEquals(1, messages.get(DiagnosisType.UNDESIRED_DATA.name()).intValue());
 	}
 
 	@Test
@@ -162,13 +163,15 @@ public class WarcModuleTest {
 
 		RepInfo info = generalInvalidChecks(warcFile);
 
-        assertEquals(15, info.getMessage().size());
+        assertEquals(16, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
-        assertEquals(3, messages.size());
+        info.getMessage().stream().forEach(message -> System.out.println(message.getMessage()));
+        assertEquals(4, messages.size());
         assertEquals(4, messages.get(DiagnosisType.REQUIRED_INVALID.name()).intValue());
         assertEquals(9, messages.get(DiagnosisType.INVALID_EXPECTED.name()).intValue());
         assertEquals(2, messages.get(DiagnosisType.INVALID.name()).intValue());
-	}
+        assertEquals(1, messages.get(DiagnosisType.UNDESIRED_DATA.name()).intValue());
+    }
 
 	@Test
     public void parseInvalidWarcFileFieldsMissing() throws Exception {
@@ -784,12 +787,13 @@ public class WarcModuleTest {
 
 		RepInfo info = generalInvalidChecks(warcFile);
 
-        assertEquals(3, info.getMessage().size());
+        assertEquals(4, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
-        assertEquals(2, messages.size());
+        assertEquals(3, messages.size());
         assertEquals(2, messages.get(DiagnosisType.INVALID.name()).intValue());
         assertEquals(1, messages.get(DiagnosisType.ERROR_EXPECTED.name()).intValue());
-	}
+        assertEquals(1, messages.get(DiagnosisType.UNDESIRED_DATA.name()).intValue());
+    }
 
 	@Test
     public void parseInvalidWarcRecord1() throws Exception {
@@ -948,12 +952,13 @@ public class WarcModuleTest {
 	 * @param info
 	 */
 	private static void invalidErrorExpectedCheck(RepInfo info) {
-		assertEquals(2, info.getMessage().size());
+		assertEquals(3, info.getMessage().size());
         Map<String, Integer> messages = extractMessages(info.getMessage());
-        assertEquals(2, messages.size());
+        assertEquals(3, messages.size());
         assertEquals(1, messages.get(DiagnosisType.INVALID.name()).intValue());
         assertEquals(1, messages.get(DiagnosisType.ERROR_EXPECTED.name()).intValue());
-	}
+        assertEquals(1, messages.get(DiagnosisType.UNDESIRED_DATA.name()).intValue());
+    }
 
 	/**
 	 * @param messages
